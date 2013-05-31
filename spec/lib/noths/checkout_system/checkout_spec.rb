@@ -31,6 +31,8 @@ describe Noths::CheckoutSystem::Checkout do
     checkout.scan(item_3)
   end
 
+  it { instance.should respond_to :checkout_rules }
+
   context "#initialize" do
     it "sets provided checkout rules" do
       expect(instance.checkout_rules).to eq checkout_rules
@@ -38,64 +40,33 @@ describe Noths::CheckoutSystem::Checkout do
   end
 
   context "#scan" do
-    it "scans the items" do
-      expect {
-        scan_all_items(instance)
-      }.not_to raise_error()
-    end
-  end
-
-  context "#items" do
-    it "keeps the list of scanned items" do
+    it "adds items to the basket" do
+      basket.should_receive(:add_item).exactly(3).times
       scan_all_items(instance)
-      expect(instance.items).to eq items
-    end
-  end
-
-  context "#total_price" do
-    context "no additional checkout rules" do
-      it "provides correct total price of scanned items" do
-        scan_all_items(instance)
-        expect(instance.total_price).to eq item_total_price(items)
-      end
-    end
-
-    context "with additional checkout rules" do
-      it "provides correct total price of scanned items" do
-        scan_all_items(instance)
-        expect(instance.total_price).to eq item_total_price(items)
-      end
     end
   end
 
   context "#total_checkout_price" do
-    context "no additional checkout rules" do
-      it "provides correct total checkout price of scanned items" do
-        scan_all_items(instance)
-        expect(instance.total_checkout_price).to eq item_total_checkout_price(items)
-      end
 
-      it "matches unmodified total price" do
+    it "recalculates totals" do
+      scan_all_items(instance)
+      expect(instance.total_checkout_price).to eq create_big_decimal(74.2)
+    end
+
+    context "when rules available" do
+      let(:checkout_rules) { [rule] }
+      let(:rule) { stub({}) }
+
+      it "applies checkout rules" do
+        rule.should_receive(:apply).exactly(1).times
         scan_all_items(instance)
-        expect(instance.total_checkout_price).to eq instance.total_price
+        instance.total_checkout_price
       end
     end
 
-    context "with TotalAmountPercentageDiscount" do
-      let(:total_amount_percentage_discount) {
-        rules_module::DiscountRules::TotalAmountPercentageDiscount.new(
-          total_price_limit, discount_percentage
-        )
-      }
-      let(:checkout_rules) { [total_amount_percentage_discount]}
-      let(:total_price_limit) { 60.00 }
-      let(:discount_percentage) { 10.0 }
-      let(:total_checkout_price) { create_big_decimal(66.78) }
+    it "returns total checkout price" do
 
-      it "calculates checkout price correctly" do
-        scan_all_items(instance)
-        expect(instance.total_checkout_price.to_f).to eq(total_checkout_price.to_f)
-      end
     end
   end
+
 end

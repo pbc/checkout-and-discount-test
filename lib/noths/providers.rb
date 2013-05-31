@@ -3,4 +3,4 @@ module Noths
   end
 end
 
-require_relative "providers/item"
+require_relative "providers/basket"
