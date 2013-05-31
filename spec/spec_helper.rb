@@ -1,7 +1,7 @@
 require "rubygems"
 require "bundler/setup"
 
-require "primus"
+require "noths"
 
 RSpec.configure do |config|
 
