@@ -7,7 +7,7 @@ describe Noths::Entities::Item do
 
   let(:price) { 25.69 }
 
-  context "#initializer" do
+  context "#initialize" do
     it "accepts price" do
       expect {
         klass.new(price)
