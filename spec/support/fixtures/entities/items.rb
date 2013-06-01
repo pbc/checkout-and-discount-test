@@ -52,21 +52,3 @@ module EntityFixtures
     end
   end
 end
-  #item_1) {  }
-  #let(:item_2) { Noths::Entities::Item.new(45.00) }
-  #let(:item_3) { Noths::Entities::Item.new(19.95) }
-  #let(:items) { [item_1,item_2,item_3] }
-  #
-  #let(:params_1) {
-  #  {
-  #    :product_code => product_code,
-  #    :name => name,
-  #    :price => price,
-  #    :checkout_price => checkout_price
-  #  }
-  #}
-  #
-  #let(:product_code) { "001" }
-  #let(:name) { "Foo Bar" }
-  #let(:price) { 25.69 }
-  #let(:checkout_price) { price }
