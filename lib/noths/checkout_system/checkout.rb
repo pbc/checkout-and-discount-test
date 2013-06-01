@@ -16,7 +16,12 @@ module Noths
       end
 
       def scan(item)
-        @basket.add_item(item)
+        basket.reset_item_checkout_prices
+        basket.add_item(item)
+        basket.recalculate_totals
+        apply_per_item_rules
+        basket.recalculate_totals
+        apply_per_total_rules
       end
 
       def total
@@ -25,10 +30,26 @@ module Noths
 
       private
 
-      def apply_checkout_rules
-        @checkout_rules.each do |rule|
+      def apply_per_item_rules
+        apply_rules(per_item_rules)
+      end
+
+      def apply_per_total_rules
+        apply_rules(per_total_rules)
+      end
+
+      def apply_rules(rules)
+        rules.each do |rule|
           rule.apply @basket
         end
+      end
+
+      def per_item_rules
+        @checkout_rules.select(&:is_per_item_rule?)
+      end
+
+      def per_total_rules
+        @checkout_rules.select(&:is_per_total_rule?)
       end
 
     end

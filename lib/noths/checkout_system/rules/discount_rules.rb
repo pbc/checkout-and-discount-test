@@ -9,3 +9,4 @@ end
 
 require_relative "discount_rules/base_discount_rule"
 require_relative "discount_rules/total_amount_percentage_discount"
+require_relative "discount_rules/item_quantity_fixed_discount"
